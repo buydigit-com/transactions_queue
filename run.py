@@ -29,5 +29,16 @@ def run():
 
         print(f"Time taken = {time.time() - start:.10f}")
         time.sleep(60)
+
+
+def run2():
+    while 1:
+        try:
+            requests.get("https://api.buydigit.com/kraken/dump-cron")
+        except Exception as e:
+            print(e)
+        
+        time.sleep(60)
+
 if __name__ == "__main__":
-    run()
+    run2()
