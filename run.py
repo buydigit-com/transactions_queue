@@ -7,14 +7,14 @@ PROCESSES = 1
 def process_txn(task_queue):
     while not task_queue.empty():
         txn = task_queue.get()
-        data = requests.get(f"https://api.buydigit.com/kraken/dump-to-fiat/{txn}").json()
+        data = requests.get(f"https://api.buydigit.com/kraken/check-kraken-deposit/{txn}").json()
         print("PROCESSED", txn,data)
     return True
 
 def run():
     while 1:
         task_queue = multiprocessing.Queue()
-        data = requests.get("https://api.buydigit.com/gateway/dump/toprocess").json()
+        data = requests.get("https://api.buydigit.com/gateway/transactions/toprocess").json()
         for txn in data["transactions"]:
             task_queue.put(txn[0])
         processes = []
@@ -29,16 +29,5 @@ def run():
 
         print(f"Time taken = {time.time() - start:.10f}")
         time.sleep(60)
-
-
-def run2():
-    while 1:
-        try:
-            requests.get("https://api.buydigit.com/kraken/dump-cron")
-        except Exception as e:
-            print(e)
-        
-        time.sleep(60)
-
 if __name__ == "__main__":
-    run2()
+    run()
